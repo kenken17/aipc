@@ -1,0 +1,2 @@
+# aipc
+AIPC course repo
