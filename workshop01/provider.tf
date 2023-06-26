@@ -16,7 +16,7 @@ terraform {
 }
 
 provider docker {
-  host =  "tcp://${var.docker_host}"
+  host =  "tcp://${var.docker_host}:2376"
   cert_path = var.docker_cert_path
 }
 

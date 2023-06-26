@@ -21,8 +21,8 @@ resource "docker_container" "bgg-database" {
   name = "${var.app_namespace}"   
   image = docker_image.bgg-database.image_id
 
-  network_advanaced {
-    name docker_network.bgg-net.id
+  networks_advanced {
+    name = docker_network.bgg-net.id
   }
 
   volumes {
@@ -41,14 +41,14 @@ resource "docker_container" "bgg-backend" {
   name  = "${var.app_namespace}-bgg-backend-${count.index}"
   image = docker_image.bgg-backend.image_id
 
-  network_advanaced {
-    name docker_network.bgg-net.id
+  networks_advanced {
+    name = docker_network.bgg-net.id
   }
 
   env = [
-    "BGG_DB_USER" = "root",
-    "BGG_DB_PASSWORD" = "changeit",
-    "BGG_DB_HOST" = "${docker_container.bgg-database.name}",
+    "BGG_DB_USER=root",
+    "BGG_DB_PASSWORD=changeit",
+    "BGG_DB_HOST=${docker_container.bgg-database.name}",
   ]
 
   ports {
@@ -97,7 +97,7 @@ resource "digitalocean_droplet" "nginx" {
   }
 
   provisioner "remote-exec" {
-    inline [
+    inline = [
       "systemctl restart nginx",
       "systemctl enable nginx",
     ]
