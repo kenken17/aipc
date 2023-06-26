@@ -18,7 +18,7 @@ resource "docker_volume" "data-vol" {
 }
 
 resource "docker_container" "bgg-database" {
-  name = "${var.app_namespace}"   
+  name  = var.app_namespace
   image = docker_image.bgg-database.image_id
 
   networks_advanced {
@@ -26,7 +26,7 @@ resource "docker_container" "bgg-database" {
   }
 
   volumes {
-    volume_name = docker_volume.data-vol.name
+    volume_name    = docker_volume.data-vol.name
     container_path = "/var/lib/mysql"
   }
 
@@ -60,7 +60,7 @@ resource "local_file" "nginx-conf" {
   filename = "nginx.conf"
   content = templatefile("sample.nginx.conf.tftpl", {
     docker_host = var.docker_host
-    ports = docker_container.bgg-backend[*].ports[0].external
+    ports       = docker_container.bgg-backend[*].ports[0].external
   })
 }
 
@@ -69,18 +69,18 @@ data "digitalocean_ssh_key" "aipc" {
 }
 
 resource "digitalocean_droplet" "nginx" {
-  name = "nginx"
-  image = var.do_image
+  name   = "nginx"
+  image  = var.do_image
   region = var.do_region
-  size = var.do_size
+  size   = var.do_size
 
-  ssh_keys = [ data.digitalocean_ssh_key.aipc.id ]
+  ssh_keys = [data.digitalocean_ssh_key.aipc.id]
 
   connection {
-    type = "ssh"
-    user = "root"
+    type        = "ssh"
+    user        = "root"
     private_key = file(var.ssh_private_key)
-    host = self.ipv4_address
+    host        = self.ipv4_address
   }
 
   provisioner "remote-exec" {
@@ -88,11 +88,11 @@ resource "digitalocean_droplet" "nginx" {
       "apt update -y",
       "apt upgrade -y",
       "apt install nginx -y",
-    ] 
+    ]
   }
-  
+
   provisioner "file" {
-    source = local_file.nginx-conf.filename
+    source      = local_file.nginx-conf.filename
     destination = "/etc/nginx/nginx.conf"
   }
 
@@ -105,16 +105,16 @@ resource "digitalocean_droplet" "nginx" {
 }
 
 resource "local_file" "root_at_nginx" {
-  filename = "root@${digitalocean_droplet.nginx.ipv4_address}"
-  content = ""
+  filename        = "root@${digitalocean_droplet.nginx.ipv4_address}"
+  content         = ""
   file_permission = "0444"
 }
 
-output nginx_ip {
+output "nginx_ip" {
   value = digitalocean_droplet.nginx.ipv4_address
 }
 
-output backend_ports {
+output "backend_ports" {
   value = docker_container.bgg-backend[*].ports[0].external
 }
 
