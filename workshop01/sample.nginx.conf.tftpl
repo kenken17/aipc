@@ -1,6 +1,6 @@
 user www-data;
-worker_process auto;
-pid /run/nginx.id;
+worker_processes auto;
+pid /run/nginx.pid;
 
 events {
   worker_connections 768;
@@ -13,14 +13,13 @@ http {
   gzip on;
 
   upstream apps {
-    least_conn; 
+    least_conn;
     %{~ for p in ports ~}
     server ${docker_host}:${p};
     %{~ endfor ~}
-  }
-
+  }  
   server {
-    listen: 80;
+    listen 80;
     location / {
       proxy_pass http://apps;
     }
