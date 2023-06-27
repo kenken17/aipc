@@ -44,8 +44,8 @@
 
   - name: Generate code-server service
     template:
-      src: code-server.service.js
-      dest: "/lib/systemd/system/code-server.service"
+      src: code-server.service.j2
+      dest: /lib/systemd/system/code-server.service
 
   - name: Enable code-server service
     systemd:
