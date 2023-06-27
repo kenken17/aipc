@@ -9,7 +9,7 @@ resource "digitalocean_droplet" "codeserver" {
   region = var.do_region
   size   = var.do_size
 
-  ssh_keys = [data.digitalocean_ssh_key.aipc]
+  ssh_keys = [data.digitalocean_ssh_key.aipc.id]
 }
 
 resource "local_file" "root_at_codeserver" {
