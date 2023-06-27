@@ -1,5 +1,5 @@
 #ssh key
-data "digitalocean_ssh_keys" "aipc" {
+data "digitalocean_ssh_key" "aipc" {
   name = var.do_ssh_key
 }
 
@@ -9,7 +9,7 @@ resource "digitalocean_droplet" "codeserver" {
   region = var.do_region
   size   = var.do_size
 
-  ssh_keys = [data.data.digitalocean_ssh_keys.aipc.id]
+  ssh_keys = [data.digitalocean_ssh_key.aipc]
 }
 
 resource "local_file" "root_at_codeserver" {
