@@ -13,7 +13,7 @@ resource "digitalocean_droplet" "codeserver" {
 }
 
 resource "local_file" "root_at_codeserver" {
-  filename        = "root@${digitalocean_droplet.codeserver.ipv4}"
+  filename        = "root@${digitalocean_droplet.codeserver.ipv4_address}"
   content         = ""
   file_permission = "0444"
 }
