@@ -1,0 +1,38 @@
+- name: Install Code Server
+  hosts: all
+  vars:
+    cs_dir: /usr/local/opt
+    cs_unpacked: code-server-4.9.1-linux-amd64
+  tasks:
+    - name: Replace code-server service
+      replace:
+        path: /lib/systemd/system/code-server.service
+        regexp: '__CODE_SERVER_PASSWORD__'
+        replace: "{{ codeserver_password }}"
+
+    - name: Enable code-server service
+      systemd:
+        name: code-server
+        daemon_reload: true
+        enabled: true
+        state: started
+
+- name: Setup Config nginx
+  hosts: all
+  tasks:
+    - name: Replace code-server.conf
+      replace:
+        path: /etc/nginx/sites-available/code-server.conf
+        regexp: '__DOMAIN_NAME__'
+        replace: "{{ codeserver_ip }}"
+
+    - name: Link code-server.conf to /etc/nginx/sites-enabled
+      file:
+        src: /etc/nginx/sites-available/code-server.conf
+        dest: /etc/nginx/sites-enabled/code-server.conf
+        state: link
+
+    - name: Restart nginx
+      systemd:
+        name: nginx
+        state: restarted
