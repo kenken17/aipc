@@ -5,6 +5,11 @@
     cs_dir: /usr/local/opt
     cs_unpacked: code-server-4.9.1-linux-amd64
   tasks:
+    - name: Remove apt lock file
+      file:
+        state: absent
+        path: "/var/lib/dpkg/lock"
+
     - name: Update OS
       apt:
         update_cache: yes

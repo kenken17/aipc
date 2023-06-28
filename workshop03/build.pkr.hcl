@@ -1,7 +1,7 @@
 source digitalocean codeserver {
   api_token = var.do_token
   image = var.do_image
-  do_region = var.do_region
+  region = var.do_region
   size = var.do_size
   ssh_username = "root"
   snapshot_name = "codeserver"
