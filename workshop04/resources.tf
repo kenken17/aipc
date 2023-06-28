@@ -1,7 +1,7 @@
 #ssh key
 data "digitalocean_droplet_snapshot" "codeserver" {
   name_regex  = "codeserver"
-  region      = "spg1"
+  region      = "sgp1"
   most_recent = true
 }
 
