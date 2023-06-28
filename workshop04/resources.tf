@@ -1,5 +1,5 @@
 #ssh key
-data "digitalocean_droplet_snapshot" "codeserver-snapshot" {
+data "digitalocean_droplet_snapshot" "codeserver" {
   name_regex  = "codeserver"
   region      = "spg1"
   most_recent = true
@@ -11,7 +11,7 @@ data "digitalocean_ssh_key" "aipc" {
 
 resource "digitalocean_droplet" "codeserver" {
   name   = "codeserver"
-  image  = data.digitalocean_droplet_snapshot.codeserver-snapshot.id
+  image  = data.digitalocean_droplet_snapshot.codeserver.id
   region = var.do_region
   size   = var.do_size
 
